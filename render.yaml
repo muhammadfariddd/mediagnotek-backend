@@ -1,0 +1,22 @@
+# Render menggunakan file ini untuk auto-deploy
+# Docs: https://docs.render.com/blueprint-spec
+
+services:
+  - type: web
+    name: mediagnotek-api
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false  # isi manual di Render dashboard
+      - key: APP_NAME
+        value: Mediagnotek API
+      - key: APP_VERSION
+        value: "1.0.0"
+      - key: DEBUG
+        value: "false"
+      - key: RXNAV_BASE_URL
+        value: https://rxnav.nlm.nih.gov/REST
+      - key: PYTHON_VERSION
+        value: "3.11.0"
