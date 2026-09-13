@@ -19,8 +19,18 @@ from app.models import Disease, Drug, Symptom, disease_drug, disease_symptom
 
 # Path ke CSV
 DATA_DIR = Path(__file__).resolve().parent.parent.parent / "data"
-OBAT_CSV = DATA_DIR / "processed_data_obat.csv"
-PENYAKIT_CSV = DATA_DIR / "processed_data_penyakit.csv"
+# Juga cek di folder Indonesian Pharmaceutical Dataset
+ALT_DATA_DIR = Path(__file__).resolve().parent.parent.parent.parent / "Indonesian Pharmaceutical Dataset"
+
+def find_csv(filename):
+    for d in [DATA_DIR, ALT_DATA_DIR]:
+        f = d / filename
+        if f.exists():
+            return f
+    raise FileNotFoundError(f"{filename} tidak ditemukan di {DATA_DIR} atau {ALT_DATA_DIR}")
+
+OBAT_CSV = find_csv("processed_data_obat.csv")
+PENYAKIT_CSV = find_csv("processed_data_penyakit.csv")
 
 
 def clean_text(text: str) -> str:

@@ -10,5 +10,11 @@
       "src": "/(.*)",
       "dest": "app/main.py"
     }
-  ]
+  ],
+  "functions": {
+    "app/main.py": {
+      "memory": 512,
+      "maxDuration": 10
+    }
+  }
 }
