@@ -10,8 +10,13 @@ Langkah:
 """
 
 import asyncio
+import sys
 import csv
 import re
+
+# Fix Windows event loop untuk psycopg async
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 from pathlib import Path
 from sqlalchemy import select
 from app.db.database import engine, async_session, Base

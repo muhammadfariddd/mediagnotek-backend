@@ -13,13 +13,14 @@ class Settings(BaseSettings):
     def async_database_url(self) -> str:
         """Konversi URL ke format psycopg async."""
         url = self.DATABASE_URL
-        if url.startswith("postgresql://"):
+        # Neon/Render menggunakan postgresql:// atau postgres://
+        if url.startswith("postgresql://") and "+psycopg" not in url:
             url = url.replace("postgresql://", "postgresql+psycopg://", 1)
         elif url.startswith("postgres://"):
             url = url.replace("postgres://", "postgresql+psycopg://", 1)
-        # Jika sudah asyncpg, ganti ke psycopg
-        if "+asyncpg" in url:
+        elif "+asyncpg" in url:
             url = url.replace("+asyncpg", "+psycopg")
+        # Biarkan sslmode=require tetap ada di URL, psycopg membutuhkannya
         return url
 
     class Config:
