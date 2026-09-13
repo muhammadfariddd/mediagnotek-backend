@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.routers import diseases, drugs, diagnosis, interactions, stock
 
@@ -8,6 +9,15 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description="API untuk deteksi penyakit, informasi obat, cek interaksi obat, dan prediksi stok",
+)
+
+# Tambahkan CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Izinkan semua domain frontend (ubah saat production)
+    allow_credentials=True,
+    allow_methods=["*"],  # Izinkan semua HTTP method
+    allow_headers=["*"],
 )
 
 # Register routers
