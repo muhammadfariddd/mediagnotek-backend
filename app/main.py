@@ -1,14 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
-from app.routers import diseases, drugs, diagnosis, interactions, stock
+from app.routers import diseases, drugs, diagnosis, interactions, stock, auth, ai_chat
 
 settings = get_settings()
 
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
-    description="API untuk deteksi penyakit, informasi obat, cek interaksi obat, dan prediksi stok",
+    description="API untuk deteksi penyakit, informasi obat, cek interaksi obat, prediksi stok, dan asisten AI",
 )
 
 # Tambahkan CORS
@@ -21,6 +21,8 @@ app.add_middleware(
 )
 
 # Register routers
+app.include_router(ai_chat.router)
+app.include_router(auth.router)
 app.include_router(diseases.router)
 app.include_router(drugs.router)
 app.include_router(diagnosis.router)

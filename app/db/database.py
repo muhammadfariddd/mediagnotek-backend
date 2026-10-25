@@ -16,13 +16,20 @@ db_url = settings.async_database_url
 # psycopg menangani SSL langsung via parameter sslmode di URL
 # Tidak perlu connect_args untuk SSL
 
-engine = create_async_engine(
-    db_url,
-    echo=settings.DEBUG,
-    pool_size=5,
-    max_overflow=10,
-    pool_pre_ping=True,
-)
+# SQLite tidak menggunakan pool_size / max_overflow default seperti PostgreSQL
+if "sqlite" in db_url:
+    engine = create_async_engine(
+        db_url,
+        echo=settings.DEBUG,
+    )
+else:
+    engine = create_async_engine(
+        db_url,
+        echo=settings.DEBUG,
+        pool_size=5,
+        max_overflow=10,
+        pool_pre_ping=True,
+    )
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
