@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
-from app.routers import diseases, drugs, diagnosis, interactions, stock, auth, ai_chat
+from app.routers import diseases, drugs, diagnosis, interactions, stock, auth, ai_chat, patients, batches
 
 settings = get_settings()
 
@@ -23,6 +23,8 @@ app.add_middleware(
 # Register routers
 app.include_router(ai_chat.router)
 app.include_router(auth.router)
+app.include_router(patients.router)
+app.include_router(batches.router)
 app.include_router(diseases.router)
 app.include_router(drugs.router)
 app.include_router(diagnosis.router)
