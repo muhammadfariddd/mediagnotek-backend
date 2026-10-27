@@ -18,7 +18,16 @@ class RegisterRequest(BaseModel):
     email: str
     password: str
     nama_lengkap: str
-    role: Optional[str] = "KASIR"  # ADMIN, APOTEKER, KASIR, KEUANGAN
+    role: Optional[str] = "ADMIN"  # ADMIN, APOTEKER, KASIR, KEUANGAN
+    nama_faskes: Optional[str] = None
+    tipe_faskes: Optional[str] = "Apotek Mandiri"
+    nomor_izin_operasional: Optional[str] = None
+    nomor_telepon: Optional[str] = None
+    alamat_lengkap: Optional[str] = None
+    kota: Optional[str] = None
+    provinsi: Optional[str] = None
+    foto_faskes_url: Optional[str] = None
+
 
 
 class UserResponse(BaseModel):
