@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
-from app.routers import diseases, drugs, diagnosis, interactions, stock, auth, ai_chat, patients, batches
+from app.routers import diseases, drugs, diagnosis, interactions, stock, auth, ai_chat, patients, batches, transactions
 
 settings = get_settings()
 
@@ -30,6 +30,7 @@ app.include_router(drugs.router)
 app.include_router(diagnosis.router)
 app.include_router(interactions.router)
 app.include_router(stock.router)
+app.include_router(transactions.router)
 
 
 @app.get("/", tags=["Root"])
