@@ -17,25 +17,30 @@ async def list_drugs(
     search: str = Query(None, description="Cari berdasarkan nama obat"),
     db: AsyncSession = Depends(get_db),
 ):
-    query = select(Drug)
-    count_query = select(func.count(Drug.id))
+    try:
+        query = select(Drug)
+        count_query = select(func.count(Drug.id))
 
-    if search:
-        query = query.where(Drug.nama.ilike(f"%{search}%"))
-        count_query = count_query.where(Drug.nama.ilike(f"%{search}%"))
+        if search:
+            query = query.where(Drug.nama.ilike(f"%{search}%"))
+            count_query = count_query.where(Drug.nama.ilike(f"%{search}%"))
 
-    total = (await db.execute(count_query)).scalar()
+        total = (await db.execute(count_query)).scalar() or 0
 
-    query = query.offset((page - 1) * size).limit(size)
-    result = await db.execute(query)
-    drugs = result.scalars().all()
+        query = query.offset((page - 1) * size).limit(size)
+        result = await db.execute(query)
+        drugs = result.scalars().all()
 
-    return PaginatedResponse(
-        total=total,
-        page=page,
-        size=size,
-        items=[DrugListOut.model_validate(d) for d in drugs],
-    )
+        return PaginatedResponse(
+            total=total,
+            page=page,
+            size=size,
+            items=[DrugListOut.model_validate(d) for d in drugs],
+        )
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Drugs Query Error: {type(e).__name__}: {str(e)}")
 
 
 @router.get("/{drug_id}", response_model=DrugDetailOut)
