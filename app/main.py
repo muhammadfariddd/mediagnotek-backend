@@ -51,3 +51,30 @@ async def root():
 @app.get("/health", tags=["Root"])
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/debug-db", tags=["Root"])
+async def debug_db():
+    import traceback
+    from app.db.database import async_session
+    from app.models import Disease, Drug
+    from sqlalchemy import select, func
+
+    report = {"db_url": settings.async_database_url}
+    try:
+        async with async_session() as session:
+            try:
+                d_c = (await session.execute(select(func.count(Disease.id)))).scalar()
+                report["diseases_count"] = d_c
+            except Exception as e:
+                report["diseases_err"] = str(e)
+
+            try:
+                dr_c = (await session.execute(select(func.count(Drug.id)))).scalar()
+                report["drugs_count"] = dr_c
+            except Exception as e:
+                report["drugs_err"] = str(e)
+                report["drugs_trace"] = traceback.format_exc()
+    except Exception as e:
+        report["session_err"] = str(e)
+    return report
