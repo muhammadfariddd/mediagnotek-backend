@@ -8,8 +8,6 @@ venv/
 dist/
 build/
 .eggs/
-*.db
-*.sqlite3
 .DS_Store
 Thumbs.db
 .idea/

@@ -1,9 +1,13 @@
+import os
+from pathlib import Path
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+DEFAULT_SQLITE_PATH = BASE_DIR / "mediagnotek.db"
 
 class Settings(BaseSettings):
-    DATABASE_URL: str = "postgresql+psycopg://postgres:postgres@localhost:5432/mediagnotek"
+    DATABASE_URL: str = f"sqlite+aiosqlite:///{DEFAULT_SQLITE_PATH.as_posix()}"
     APP_NAME: str = "Mediagnotek API"
     APP_VERSION: str = "1.0.0"
     DEBUG: bool = False

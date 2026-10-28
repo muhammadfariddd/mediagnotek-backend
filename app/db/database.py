@@ -21,6 +21,7 @@ if "sqlite" in db_url:
     engine = create_async_engine(
         db_url,
         echo=settings.DEBUG,
+        connect_args={"check_same_thread": False},
     )
 else:
     engine = create_async_engine(
